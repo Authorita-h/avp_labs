@@ -1,0 +1,7 @@
+#!/bin/bash
+
+SOURCE_CODE_FILE_NAME=main.cpp
+OUTPUT_FILE=main_exe
+
+g++ $SOURCE_CODE_FILE_NAME -o $OUTPUT_FILE
+./$OUTPUT_FILE
