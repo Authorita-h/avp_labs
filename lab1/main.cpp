@@ -200,13 +200,8 @@ int main()
     int matrix_1_rows = 1, matrix_1_cols = 3;
     int matrix_2_rows = 3, matrix_2_cols = 1;
 
-    int inner_matrix_1_rows = 2, inner_matrix_1_cols = 3;
-    int inner_matrix_2_rows = 3, inner_matrix_2_cols = 2;
-
-    cout << "Enter matrix 1 rows: " << endl;
-    cin >> matrix_1_rows; 
-    cout << "Enter matrix 2 cols: " << endl;
-    cin >> matrix_2_cols;
+    int inner_matrix_1_rows = 266, inner_matrix_1_cols = 1000;
+    int inner_matrix_2_rows = 1000, inner_matrix_2_cols = 266;
 
     srand((unsigned int)(time(nullptr)));
 
@@ -240,4 +235,8 @@ int main()
     print_matrix(result, matrix_1_rows, matrix_2_cols, inner_matrix_1_rows, inner_matrix_2_cols);
     cout << '\n'
          << endl;
+
+    delete_matrix(matrix_1, matrix_1_rows, matrix_1_cols, inner_matrix_1_rows, inner_matrix_1_cols);
+    delete_matrix(matrix_2, matrix_2_rows, matrix_2_cols, inner_matrix_2_rows, inner_matrix_2_cols);
+    delete_matrix(result, matrix_1_rows, matrix_2_cols, inner_matrix_1_rows, inner_matrix_2_cols);
 }
