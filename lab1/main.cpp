@@ -134,6 +134,7 @@ float **multiply_inner_matrices(float **matrix_1, int rows_1, int cols_1, float 
     if (cols_1 != rows_2)
     {
         cout << "Cannot mutiply inner matrices!" << endl;
+        exit(0);
     }
 
     float **result_matrix = inner_matrix_initialization(rows_1, cols_2);
@@ -169,6 +170,7 @@ float ****multiply_matrices(
     if (cols_1 != rows_2)
     {
         cout << "Cannot mutiply matrices!" << endl;
+        exit(0);
     }
 
     float ****result_matrix = matrix_initialization(rows_1, cols_2, inner_rows_1, inner_cols_2);
@@ -181,10 +183,11 @@ float ****multiply_matrices(
             fill_inner_matrix_with_number(result, inner_rows_1, inner_cols_2, 0);
             for (int k = 0; k < cols_1; k++)
             {
-                float **mul_result = multiply_inner_matrices(*(*(matrix_1 + i) + j), inner_rows_1, inner_cols_1, *(*(matrix_2 + k) + j), inner_rows_2, inner_cols_2);
+                float **mul_result = multiply_inner_matrices(*(*(matrix_1 + i) + k), inner_rows_1, inner_cols_1, *(*(matrix_2 + k) + j), inner_rows_2, inner_cols_2);
                 result = sum_inner_matrix(result, mul_result, inner_rows_1, inner_cols_2);
                 delete_inner_matrix(mul_result, inner_rows_1, inner_cols_1);
             }
+            delete_inner_matrix(*(*(result_matrix + i) + j), inner_rows_1, inner_cols_2);
             *(*(result_matrix + i) + j) = result;
         }
     }
@@ -199,6 +202,11 @@ int main()
 
     int inner_matrix_1_rows = 2, inner_matrix_1_cols = 3;
     int inner_matrix_2_rows = 3, inner_matrix_2_cols = 2;
+
+    cout << "Enter matrix 1 rows: " << endl;
+    cin >> matrix_1_rows; 
+    cout << "Enter matrix 2 cols: " << endl;
+    cin >> matrix_2_cols;
 
     srand((unsigned int)(time(nullptr)));
 
