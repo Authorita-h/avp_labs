@@ -209,11 +209,13 @@ int main()
 
     cout << "Matrix 1:" << endl;
     print_matrix(matrix_1, matrix_1_rows, matrix_1_cols, inner_matrix_1_rows, inner_matrix_1_cols);
-    cout << '\n' << endl;
+    cout << '\n'
+         << endl;
 
     cout << "Matrix 2:" << endl;
     print_matrix(matrix_2, matrix_2_rows, matrix_2_cols, inner_matrix_2_rows, inner_matrix_2_cols);
-    cout << '\n' << endl;
+    cout << '\n'
+         << endl;
 
     float ****result = multiply_matrices(matrix_1,
                                          matrix_1_rows,
@@ -228,5 +230,6 @@ int main()
 
     cout << "Result:" << endl;
     print_matrix(result, matrix_1_rows, matrix_2_cols, inner_matrix_1_rows, inner_matrix_2_cols);
-    cout << '\n' << endl;
+    cout << '\n'
+         << endl;
 }
