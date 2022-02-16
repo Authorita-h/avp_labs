@@ -6,6 +6,12 @@ using namespace std;
 
 float **inner_matrix_initialization(int rows, int cols)
 {
+    if (rows < 0 || cols < 0)
+    {
+        cout << "Cannot initialize inner matrix!" << endl;
+        exit(0);
+    }
+
     float **matrix = new float *[rows];
 
     for (int i = 0; i < rows; i++)
@@ -51,6 +57,12 @@ void fill_inner_matrix_with_number(float **matrix, int rows, int cols, float num
 
 float ****matrix_initialization(int rows, int cols, int inner_rows, int inner_cols)
 {
+    if (rows < 0 || cols < 0)
+    {
+        cout << "Cannot initialize matrix!" << endl;
+        exit(0);
+    }
+
     float ****matrix = new float ***[rows];
     for (int i = 0; i < rows; i++)
     {
