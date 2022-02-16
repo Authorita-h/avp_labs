@@ -196,8 +196,10 @@ float ****multiply_matrices(
             for (int k = 0; k < cols_1; k++)
             {
                 float **mul_result = multiply_inner_matrices(*(*(matrix_1 + i) + k), inner_rows_1, inner_cols_1, *(*(matrix_2 + k) + j), inner_rows_2, inner_cols_2);
+                float **temp_result = result;
                 result = sum_inner_matrix(result, mul_result, inner_rows_1, inner_cols_2);
-                delete_inner_matrix(mul_result, inner_rows_1, inner_cols_1);
+                delete_inner_matrix(temp_result, inner_rows_1, inner_cols_2);
+                delete_inner_matrix(mul_result, inner_rows_1, inner_cols_2);
             }
             delete_inner_matrix(*(*(result_matrix + i) + j), inner_rows_1, inner_cols_2);
             *(*(result_matrix + i) + j) = result;
@@ -209,11 +211,11 @@ float ****multiply_matrices(
 
 int main()
 {
-    int matrix_1_rows = 1, matrix_1_cols = 3;
-    int matrix_2_rows = 3, matrix_2_cols = 1;
+    int matrix_1_rows = 7, matrix_1_cols = 13;
+    int matrix_2_rows = 13, matrix_2_cols = 6;
 
-    int inner_matrix_1_rows = 266, inner_matrix_1_cols = 1000;
-    int inner_matrix_2_rows = 1000, inner_matrix_2_cols = 266;
+    int inner_matrix_1_rows = 266, inner_matrix_1_cols = 500;
+    int inner_matrix_2_rows = 500, inner_matrix_2_cols = 266;
 
     srand((unsigned int)(time(nullptr)));
 
@@ -222,15 +224,15 @@ int main()
     float ****matrix_1 = matrix_initialization(matrix_1_rows, matrix_1_cols, inner_matrix_1_rows, inner_matrix_1_cols);
     fill_matrix_with_random_matrix(matrix_1, matrix_1_rows, matrix_1_cols, inner_matrix_1_rows, inner_matrix_1_cols);
 
-    cout << "Matrix 1:" << endl;
-    print_matrix(matrix_1, matrix_1_rows, matrix_1_cols, inner_matrix_1_rows, inner_matrix_1_cols);
-    cout << '\n'
-         << endl;
+    // cout << "Matrix 1:" << endl;
+    // print_matrix(matrix_1, matrix_1_rows, matrix_1_cols, inner_matrix_1_rows, inner_matrix_1_cols);
+    // cout << '\n'
+    //      << endl;
 
-    cout << "Matrix 2:" << endl;
-    print_matrix(matrix_2, matrix_2_rows, matrix_2_cols, inner_matrix_2_rows, inner_matrix_2_cols);
-    cout << '\n'
-         << endl;
+    // cout << "Matrix 2:" << endl;
+    // print_matrix(matrix_2, matrix_2_rows, matrix_2_cols, inner_matrix_2_rows, inner_matrix_2_cols);
+    // cout << '\n'
+    //      << endl;
 
     float ****result = multiply_matrices(matrix_1,
                                          matrix_1_rows,
