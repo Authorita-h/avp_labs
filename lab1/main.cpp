@@ -209,6 +209,53 @@ float ****multiply_matrices(
     return result_matrix;
 }
 
+bool compare_inner_matrices(float **matrix_1, int rows_1, int cols_1, float **matrix_2, int rows_2, int cols_2)
+{
+    if (rows_1 != rows_2 || cols_1 != cols_2)
+    {
+        return false;
+    }
+    for (int i = 0; i < rows_1; i++)
+    {
+        for (int j = 0; j < cols_1; j++)
+        {
+            if (*(*(matrix_1 + i) + j) != *(*(matrix_2 + i) + j))
+                return false;
+        }
+    }
+    return true;
+}
+
+bool compare_matrices(
+    float ****matrix_1,
+    int rows_1,
+    int cols_1,
+    float ****matrix_2,
+    int rows_2,
+    int cols_2,
+    int inner_rows_1,
+    int inner_cols_1,
+    int inner_rows_2,
+    int inner_cols_2)
+{
+    if (rows_1 != rows_2 || cols_1 != cols_2)
+    {
+        return false;
+    }
+
+    for (int i = 0; i < rows_1; i++)
+    {
+        for (int j = 0; j < cols_1; j++)
+        {
+            if (!compare_inner_matrices(*(*(matrix_1 + i) + j), inner_rows_1, inner_cols_1, *(*(matrix_2 + i) + j), inner_rows_2, inner_cols_2))
+                return false;
+        }
+    }
+    return true;
+}
+
+
+
 int main()
 {
     int matrix_1_rows = 7, matrix_1_cols = 13;
@@ -245,10 +292,16 @@ int main()
                                          inner_matrix_2_rows,
                                          inner_matrix_2_cols);
 
-    cout << "Result:" << endl;
-    print_matrix(result, matrix_1_rows, matrix_2_cols, inner_matrix_1_rows, inner_matrix_2_cols);
-    cout << '\n'
-         << endl;
+    float ****test = result;
+    if (compare_matrices(result, matrix_1_rows, matrix_2_cols, test, matrix_1_rows, matrix_2_cols, inner_matrix_1_rows, inner_matrix_2_cols, inner_matrix_1_rows, inner_matrix_2_cols))
+        cout << "They are equal" << endl;
+    else
+        cout << "They are not equal" << endl;
+
+    // cout << "Result:" << endl;
+    // print_matrix(result, matrix_1_rows, matrix_2_cols, inner_matrix_1_rows, inner_matrix_2_cols);
+    // cout << '\n'
+    //      << endl;
 
     delete_matrix(matrix_1, matrix_1_rows, matrix_1_cols, inner_matrix_1_rows, inner_matrix_1_cols);
     delete_matrix(matrix_2, matrix_2_rows, matrix_2_cols, inner_matrix_2_rows, inner_matrix_2_cols);
