@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+// #include <x86intrin.h>
+#include <intrin.h>
 
 using namespace std;
 
@@ -254,7 +256,30 @@ bool compare_matrices(
     return true;
 }
 
+float** multiply_inner_matrices_intrinsics(float **matrix_1, int rows_1, int cols_1, float** matrix_2, int rows_2, int cols_2) 
+{
+    if (cols_1 != rows_2) 
+    {
+        cout << "Cannot multiply inner matrices" << endl;
+        exit(0);
+    }
 
+    float **result_matrix = inner_matrix_initialization(rows_1, cols_2);
+
+    for (int i = 0; i < rows_1; i++) 
+    {
+        for (int k = 0; k < cols_2; k++)
+        {
+            for (int j = 0; j < cols_1; j += 8)
+            {
+                _mm256_storeu_ps(result_matrix[i] + j, _mm256_add_ps(_mm256_loadu_ps(result_matrix[i] + j), 
+					_mm256_mul_ps(_mm256_set1_ps(matrix_1[i][k]), _mm256_loadu_ps(matrix_2[k] + j))));
+            }
+        }
+    }
+
+    return result_matrix;
+}
 
 int main()
 {
@@ -266,10 +291,10 @@ int main()
 
     srand((unsigned int)(time(nullptr)));
 
-    float ****matrix_2 = matrix_initialization(matrix_2_rows, matrix_2_cols, inner_matrix_2_rows, inner_matrix_2_cols);
-    fill_matrix_with_random_matrix(matrix_2, matrix_2_rows, matrix_2_cols, inner_matrix_2_rows, inner_matrix_2_cols);
-    float ****matrix_1 = matrix_initialization(matrix_1_rows, matrix_1_cols, inner_matrix_1_rows, inner_matrix_1_cols);
-    fill_matrix_with_random_matrix(matrix_1, matrix_1_rows, matrix_1_cols, inner_matrix_1_rows, inner_matrix_1_cols);
+    // float ****matrix_2 = matrix_initialization(matrix_2_rows, matrix_2_cols, inner_matrix_2_rows, inner_matrix_2_cols);
+    // fill_matrix_with_random_matrix(matrix_2, matrix_2_rows, matrix_2_cols, inner_matrix_2_rows, inner_matrix_2_cols);
+    // float ****matrix_1 = matrix_initialization(matrix_1_rows, matrix_1_cols, inner_matrix_1_rows, inner_matrix_1_cols);
+    // fill_matrix_with_random_matrix(matrix_1, matrix_1_rows, matrix_1_cols, inner_matrix_1_rows, inner_matrix_1_cols);
 
     // cout << "Matrix 1:" << endl;
     // print_matrix(matrix_1, matrix_1_rows, matrix_1_cols, inner_matrix_1_rows, inner_matrix_1_cols);
@@ -281,29 +306,43 @@ int main()
     // cout << '\n'
     //      << endl;
 
-    float ****result = multiply_matrices(matrix_1,
-                                         matrix_1_rows,
-                                         matrix_1_cols,
-                                         matrix_2,
-                                         matrix_2_rows,
-                                         matrix_2_cols,
-                                         inner_matrix_1_rows,
-                                         inner_matrix_1_cols,
-                                         inner_matrix_2_rows,
-                                         inner_matrix_2_cols);
+    // float ****result = multiply_matrices(matrix_1,
+    //                                      matrix_1_rows,
+    //                                      matrix_1_cols,
+    //                                      matrix_2,
+    //                                      matrix_2_rows,
+    //                                      matrix_2_cols,
+    //                                      inner_matrix_1_rows,
+    //                                      inner_matrix_1_cols,
+    //                                      inner_matrix_2_rows,
+    //                                      inner_matrix_2_cols);
 
-    float ****test = result;
-    if (compare_matrices(result, matrix_1_rows, matrix_2_cols, test, matrix_1_rows, matrix_2_cols, inner_matrix_1_rows, inner_matrix_2_cols, inner_matrix_1_rows, inner_matrix_2_cols))
+    float **m1 = inner_matrix_initialization(inner_matrix_1_rows, inner_matrix_1_cols);
+    float **m2 = inner_matrix_initialization(inner_matrix_2_rows, inner_matrix_2_cols);
+
+    float **result = multiply_inner_matrices(m1, inner_matrix_1_rows, inner_matrix_1_cols, m2, inner_matrix_2_rows, inner_matrix_2_cols);
+    float **i_result = multiply_inner_matrices_intrinsics(m1, inner_matrix_1_rows, inner_matrix_1_cols, m2, inner_matrix_2_rows, inner_matrix_2_cols);
+
+    if (compare_inner_matrices(result, inner_matrix_1_rows, inner_matrix_2_cols, i_result, inner_matrix_1_rows, inner_matrix_2_cols))
+    {
         cout << "They are equal" << endl;
+    }
     else
+    {
         cout << "They are not equal" << endl;
+    }
+
+    delete_inner_matrix(m1, inner_matrix_1_rows, inner_matrix_1_cols);
+    delete_inner_matrix(m2, inner_matrix_2_rows, inner_matrix_2_cols);
+
+    
 
     // cout << "Result:" << endl;
     // print_matrix(result, matrix_1_rows, matrix_2_cols, inner_matrix_1_rows, inner_matrix_2_cols);
     // cout << '\n'
     //      << endl;
 
-    delete_matrix(matrix_1, matrix_1_rows, matrix_1_cols, inner_matrix_1_rows, inner_matrix_1_cols);
-    delete_matrix(matrix_2, matrix_2_rows, matrix_2_cols, inner_matrix_2_rows, inner_matrix_2_cols);
-    delete_matrix(result, matrix_1_rows, matrix_2_cols, inner_matrix_1_rows, inner_matrix_2_cols);
+    // delete_matrix(matrix_1, matrix_1_rows, matrix_1_cols, inner_matrix_1_rows, inner_matrix_1_cols);
+    // delete_matrix(matrix_2, matrix_2_rows, matrix_2_cols, inner_matrix_2_rows, inner_matrix_2_cols);
+    // delete_matrix(result, matrix_1_rows, matrix_2_cols, inner_matrix_1_rows, inner_matrix_2_cols);
 }
