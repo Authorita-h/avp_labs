@@ -77,7 +77,7 @@ void print_matrix(float**** matrix, int rows, int cols, int inner_rows, int inne
     }
 }
 
-void delete_inner_matrix(float** matrix, zint rows, int cols)
+void delete_inner_matrix(float** matrix, int rows, int cols)
 {
     for (int i = 0; i < rows; i++)
     {
