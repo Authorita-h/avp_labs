@@ -1,8 +1,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-// #include <x86intrin.h>
-#include <intrin.h>
+#include <x86intrin.h>
+// #include <intrin.h>
 
 using namespace std;
 
